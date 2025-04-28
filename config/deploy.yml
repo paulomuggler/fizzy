@@ -27,3 +27,5 @@ env:
 
 aliases:
   console: app exec -i --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
