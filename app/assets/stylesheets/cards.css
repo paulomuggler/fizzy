@@ -308,4 +308,102 @@
 
   .card:nth-child(2n+1) .bubble { --bubble-rotate: -90deg; }
   .card:nth-child(3n+1) .bubble { --bubble-rotate: 45deg; }
+
+  /* Variants
+  /* ------------------------------------------------------------------------ */
+
+  .card--golden.card--doing {
+    --lch-golden: 89.1% 0.178 95.7;
+
+    background-color: var(--color-canvas);
+    background-image: linear-gradient(60deg,
+      oklch(var(--lch-golden) / 0.5) 0%,
+      oklch(var(--lch-golden) / 0.15) 33%,
+      oklch(var(--lch-golden) / 0.05) 66%,
+      oklch(var(--lch-golden) / 0.5) 100%
+    );
+    box-shadow:
+      0 0 0 1px oklch(var(--lch-golden) / 75%),
+      0 0 0.5em 0.2em oklch(var(--lch-golden) / 25%),
+      0 0 1em 0.8em oklch(var(--lch-golden) / 25%) !important;
+
+    @media (prefers-color-scheme: dark) {
+      --lch-golden: var(--lch-blue-medium);
+    }
+  }
+
+  .card--notification {
+    --card-color: var(--color-card-default);
+    --card-padding-inline: 1ch;
+    --card-padding-block: 1ch;
+
+    background-color: var(--color-canvas);
+
+    &.card--closed {
+      --card-color: var(--color-card-complete);
+    }
+
+    .card__collection {
+      font-size: var(--text-xx-small);
+      padding-block: 0.5ch;
+    }
+
+    .card__body {
+      padding-block-end: 0;
+    }
+
+    .card__title {
+      font-size: var(--text-small);
+      font-weight: bold;
+      min-block-size: 0;
+    }
+
+    .card__notification-meta {
+      font-size: var(--text-small);
+    }
+  }
+
+  .card__notification-unread-indicator {
+    --btn-background: var(--color-canvas);
+    --btn-border-color: var(--color-canvas);
+    --btn-icon-size: 0.75em;
+    --btn-padding: 0;
+    --btn-size: 1.25em;
+    --hover-size: 0;
+
+    inset: 0 0 auto auto;
+    position: absolute;
+    z-index: 1;
+
+    &:before,
+    .icon {
+      transition: opacity 150ms ease;
+    }
+
+    /* The red dot */
+    &:before {
+      aspect-ratio: 1;
+      background-color: var(--color-marker);
+      border-radius: 50%;
+      content: "";
+      inline-size: 50%;
+      inset: 50% auto auto 50%;
+      position: absolute;
+      translate: -50% -50%;
+    }
+
+    /* The X */
+    .icon {
+      opacity: 0;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        --btn-background: transparent;
+
+        &:before { opacity: 0; }
+           .icon { opacity: 1; }
+      }
+    }
+  }
 }
