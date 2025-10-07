@@ -1,5 +1,5 @@
 <%= turbo_frame_tag @card, :assignment do %>
-  <%= tag.div class: "max-width", data: {
+  <%= tag.div class: "max-width txt-transform-none", data: {
 				action: "turbo:before-cache@document->dialog#close dialog:show@document->navigable-list#reset keydown->navigable-list#navigate filter:changed->navigable-list#reset",
 				controller: "filter navigable-list",
 				dialog_target: "dialog",
@@ -23,6 +23,9 @@
           <% end %>
         </li>
       <% end %>
+      <li class="popup__item popup__item--empty">
+        No results
+      </li>
     </ul>
   <% end %>
 <% end %>

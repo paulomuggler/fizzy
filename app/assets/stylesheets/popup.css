@@ -124,6 +124,17 @@
     }
   }
 
+  .popup__item--empty {
+    opacity: 0.66;
+    padding: var(--inline-space-half) var(--popup-item-padding-inline);
+    pointer-events: none;
+
+    .popup__list:has([data-filter-target]:not([hidden])) & {
+      display: none;
+    }
+  }
+
+
   /* The actionable thing with padding within popup__item */
   .popup__btn {
     --btn-border-radius: 0.3em;
