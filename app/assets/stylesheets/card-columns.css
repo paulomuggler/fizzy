@@ -91,6 +91,11 @@
       }
     }
 
+    &.drag-and-drop__hover-container {
+      --dnd-bg-color: var(--column-color);
+      --dnd-border-color: var(--card-color);
+    }
+
     @media (any-hover: hover) {
       .card:has(.card__background img:not([src=""])):hover .card__background img:not([src=""]) {
         filter: blur(3px) brightness(1.2);
