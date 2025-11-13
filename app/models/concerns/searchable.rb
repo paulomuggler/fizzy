@@ -2,7 +2,7 @@ module Searchable
   extend ActiveSupport::Concern
 
   def self.search_index_table_name(account_id)
-    "search_index_#{account_id % 16}"
+    "search_index_#{Zlib.crc32(account_id) % 16}"
   end
 
   included do
@@ -18,13 +18,15 @@ module Searchable
   private
     def create_in_search_index
       table_name = Searchable.search_index_table_name(account_id)
+      uuid_type = ActiveRecord::Type.lookup(:uuid, adapter: :trilogy)
 
       self.class.connection.execute self.class.sanitize_sql([
-        "INSERT INTO #{table_name} (searchable_type, searchable_id, card_id, board_id, title, content, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO #{table_name} (id, searchable_type, searchable_id, card_id, board_id, title, content, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        uuid_type.serialize(ActiveRecord::Type::Uuid.generate),
         self.class.name,
-        id,
-        search_card_id,
-        search_board_id,
+        uuid_type.serialize(id),
+        uuid_type.serialize(search_card_id),
+        uuid_type.serialize(search_board_id),
         search_title,
         search_content,
         created_at
@@ -33,16 +35,17 @@ module Searchable
 
     def update_in_search_index
       table_name = Searchable.search_index_table_name(account_id)
+      uuid_type = ActiveRecord::Type.lookup(:uuid, adapter: :trilogy)
 
       result = self.class.connection.execute(self.class.sanitize_sql([
         "UPDATE #{table_name} SET card_id = ?, board_id = ?, title = ?, content = ?, created_at = ? WHERE searchable_type = ? AND searchable_id = ?",
-        search_card_id,
-        search_board_id,
+        uuid_type.serialize(search_card_id),
+        uuid_type.serialize(search_board_id),
         search_title,
         search_content,
         created_at,
         self.class.name,
-        id
+        uuid_type.serialize(id)
       ]))
 
       create_in_search_index if result.affected_rows == 0
@@ -50,11 +53,12 @@ module Searchable
 
     def remove_from_search_index
       table_name = Searchable.search_index_table_name(account_id)
+      uuid_type = ActiveRecord::Type.lookup(:uuid, adapter: :trilogy)
 
       self.class.connection.execute self.class.sanitize_sql([
         "DELETE FROM #{table_name} WHERE searchable_type = ? AND searchable_id = ?",
         self.class.name,
-        id
+        uuid_type.serialize(id)
       ])
     end
 
