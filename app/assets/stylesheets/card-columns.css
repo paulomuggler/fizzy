@@ -203,8 +203,6 @@
   .cards__new-column {
     margin-block-start: var(--column-width-collapsed);
     scroll-snap-align: center;
-    background: gold;
-    inline-size: 40px;
   }
 
   /* Cards grid; used when filtering
