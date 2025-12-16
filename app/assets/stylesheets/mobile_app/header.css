@@ -5,4 +5,10 @@
   ) {
     display: none;
   }
+
+  .header__actions {
+    .btn--back {
+      display: none;
+    }
+  }
 }
