@@ -5,6 +5,9 @@ class Webhooks::ActivationsController < ApplicationController
     webhook = Current.account.webhooks.find(params[:webhook_id])
     webhook.activate
 
-    redirect_to webhook
+    respond_to do |format|
+      format.html { redirect_to webhook }
+      format.json { head :no_content }
+    end
   end
 end

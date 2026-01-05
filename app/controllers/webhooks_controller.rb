@@ -16,8 +16,12 @@ class WebhooksController < ApplicationController
   end
 
   def create
-    webhook = @board.webhooks.create!(webhook_params)
-    redirect_to webhook
+    @webhook = @board.webhooks.create!(webhook_params)
+
+    respond_to do |format|
+      format.html { redirect_to @webhook }
+      format.json { render :show, status: :created, location: board_webhook_path(@board, @webhook, format: :json) }
+    end
   end
 
   def edit
@@ -25,12 +29,20 @@ class WebhooksController < ApplicationController
 
   def update
     @webhook.update!(webhook_params.except(:url))
-    redirect_to @webhook
+
+    respond_to do |format|
+      format.html { redirect_to @webhook }
+      format.json { head :no_content }
+    end
   end
 
   def destroy
     @webhook.destroy!
-    redirect_to board_webhooks_path
+
+    respond_to do |format|
+      format.html { redirect_to board_webhooks_path }
+      format.json { head :no_content }
+    end
   end
 
   private
